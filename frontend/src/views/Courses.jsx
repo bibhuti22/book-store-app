@@ -1,13 +1,34 @@
-import React from "react";
-import mockBooks from "../../mocks/books.json";
+import React, { useEffect, useState } from "react";
 import BookCard from "../components/BookCard";
 import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchBooks } from "../store/slices/booksSlice";
 
 const Courses = () => {
-  const paidBooks = mockBooks.filter((book) => book.category !== "Free");
+  const [paidBooks, setpaidBooks] = useState([]);
+
+  const books = useSelector((state) => {
+    return state.books.books;
+  });
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    try {
+      dispatch(fetchBooks());
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    const paidBooks = books.filter((book) => book.category === "Paid");
+
+    setpaidBooks(paidBooks);
+  }, [books]);
+
   return (
     <>
-      <div className=" max-w-screen-2xl dark:bg-slate-700 dark:text-white container mx-auto md:px-20 px-4">
+      <div className="max-w-screen-2xl dark:bg-slate-700 dark:text-white container mx-auto md:px-20 px-4">
         <div className="pt-28 items-center justify-center text-center">
           <h1 className="text-2xl  md:text-4xl">
             We're delighted to have you{" "}

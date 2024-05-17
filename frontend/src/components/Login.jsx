@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { login } from "../store/slices/userSlice";
+import { useDispatch } from "react-redux";
+import toast from "react-hot-toast";
 
 const Login = ({ showModal, onClose }) => {
   const closeModal = () => {
@@ -15,11 +18,28 @@ const Login = ({ showModal, onClose }) => {
   } = useForm();
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    console.log(data);
-    closeModal();
-    navigate("/");
+    const user = {
+      email: data.email,
+      password: data.password,
+    };
+
+    dispatch(login(user))
+      .then(() => {
+        toast.success("Login Successful");
+        closeModal();
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000);
+        navigate("/home");
+      })
+      .catch((error) => {
+        console.log(error);
+        // alert(`Error: ${error.message}`);
+        toast.error(`Error: ${error.message}`);
+      });
   };
 
   useEffect(() => {
@@ -79,7 +99,10 @@ const Login = ({ showModal, onClose }) => {
 
             {/* Button */}
             <div className="flex space-x-10 items-center mt-6">
-              <button type="submit" className="bg-pink-500 text-white rounded-md px-3 py-1 hover:bg-pink-700 duration-200">
+              <button
+                type="submit"
+                className="bg-pink-500 text-white rounded-md px-3 py-1 hover:bg-pink-700 duration-200"
+              >
                 Login
               </button>
               <p>

@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Login from "./Login";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { signup } from "../store/slices/userSlice";
+import toast from "react-hot-toast";
 
 const Signup = () => {
   const {
@@ -11,10 +14,24 @@ const Signup = () => {
   } = useForm();
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    console.log(data);
-    navigate("/");
+    const user = {
+      name: data.fullname,
+      email: data.email,
+      password: data.password,
+    };
+
+    dispatch(signup(user))
+      .then(() => {
+        toast.success("Signup Success");
+        navigate("/");
+      })
+      .catch((error) => {
+        console.log(error);
+        toast.error(`Error: ${error.message}`);
+      });
   };
 
   const [showLoginModal, setLoginModal] = useState(false);

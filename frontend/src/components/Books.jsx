@@ -1,10 +1,8 @@
 import React from "react";
 import BookCard from "./BookCard";
 import Slider from "react-slick";
-import mockBooks from "../../mocks/books.json";
 
-const Books = () => {
-  const freeBooks = mockBooks.filter((book) => book.category === "Free");
+const Books = ({ books }) => {
   var settings = {
     dots: true,
     infinite: false,
@@ -46,7 +44,7 @@ const Books = () => {
         <p className="pb-10">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Labore quaerat commodi expedita praesentium laborum optio molestias omnis dicta cumque voluptatibus. Cupiditate earum quidem eveniet labore ab nemo rem iste magnam!</p>
         <div className="slider-container dark:bg-slate-700 dark:text-white bg-base-200">
           <Slider {...settings}>
-            {freeBooks.map((book) => (
+            {books.map((book) => (
               <li key={book.id}>
                 <BookCard
                   image={book.imageLink}
