@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Login from "./Login";
+import { useSelector } from "react-redux";
+import Logout from "./Logout";
 
 const NavBar = () => {
-  const [showLoginModal, setLoginModal] = useState(false)
+  const [showLoginModal, setLoginModal] = useState(false);
   const [highlight, setHighlight] = useState(false);
   const [theme, setTheme] = useState(
     localStorage.getItem("theme") ? localStorage.getItem("theme") : "light"
   );
+
+  const [user, setUser] = useState(JSON.parse(localStorage.getItem("user") ?? null));
+
   const element = document.documentElement;
   useEffect(() => {
     if (theme === "dark") {
@@ -35,7 +40,7 @@ const NavBar = () => {
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  });
+  }, []);
 
   const navItems = (
     <>
@@ -64,7 +69,9 @@ const NavBar = () => {
   return (
     <div
       className={`max-w-screen-2xl dark:bg-slate-800 dark:text-white container fixed top-0 right-0 left-0 z-40 bg-base-200 ${
-        highlight ? "sticky-navbar shadow-md bg-base-200 dark:bg-slate-700 dark:text-white duration-200" : ""
+        highlight
+          ? "sticky-navbar shadow-md bg-base-200 dark:bg-slate-700 dark:text-white duration-200"
+          : ""
       }`}
     >
       <div className="navbar md:px-10">
@@ -144,14 +151,27 @@ const NavBar = () => {
               </svg>
             </label>
           </div>
+          {user && <div className="text-xl font-bold flex">Hi,{" "} <span className="text-red-500 px-2">{user.name}</span></div>}
           <div>
-            <a className="btn bg-black text-white hover:bg-slate-600 duration-300 rounded-md" onClick={() => setLoginModal(true)}>
-              Login
-            </a>
+            {user ? (
+              <Logout />
+            ) : (
+              <a
+                className="btn bg-black text-white hover:bg-slate-600 duration-300 rounded-md"
+                onClick={() => setLoginModal(true)}
+              >
+                Login
+              </a>
+            )}
           </div>
         </div>
       </div>
-      {showLoginModal && <Login showModal={showLoginModal} onClose={() => setLoginModal(false)}/>}
+      {showLoginModal && (
+        <Login
+          showModal={showLoginModal}
+          onClose={() => setLoginModal(false)}
+        />
+      )}
     </div>
   );
 };
