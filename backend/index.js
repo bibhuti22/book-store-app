@@ -27,7 +27,6 @@ try {
 app.use("/api/books", bookRoute);
 app.use("/api/user", userRoute);
 
-
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
