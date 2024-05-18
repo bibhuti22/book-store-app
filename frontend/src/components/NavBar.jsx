@@ -151,7 +151,7 @@ const NavBar = () => {
               </svg>
             </label>
           </div>
-          {user && <div className="text-xl font-bold flex">Hi,{" "} <span className="text-red-500 px-2">{user.name}</span></div>}
+          {user && <div className="hidden text-xl font-bold md:flex">Hi,{" "} <span className="text-red-500 px-2">{user.name}</span></div>}
           <div>
             {user ? (
               <Logout />
